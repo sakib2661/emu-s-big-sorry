@@ -50,6 +50,7 @@ function ApologyApp() {
   const [noClicks, setNoClicks] = useState(0);
   const [noPos, setNoPos] = useState<{ x: number; y: number } | null>(null);
   const buttonZoneRef = useRef<HTMLDivElement>(null);
+  const yesRef = useRef<HTMLButtonElement>(null);
 
   const stage = Math.min(noClicks, 3);
   const crying = noClicks >= 3;
@@ -76,13 +77,49 @@ function ApologyApp() {
   function moveNoAway() {
     const zone = buttonZoneRef.current;
     if (!zone) return;
-    const rect = zone.getBoundingClientRect();
-    // Keep the button fully inside the zone.
-    const maxX = Math.max(0, rect.width - 130);
-    const maxY = Math.max(0, rect.height - 60);
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-    setNoPos({ x, y });
+    const zr = zone.getBoundingClientRect();
+    const noW = 104;
+    const noH = 40;
+    const margin = 6;
+    // Candidate anchors around the perimeter so No always has room and
+    // stays reachable (never hides under the Yes button).
+    const cands = [
+      { x: margin, y: margin },
+      { x: zr.width - noW - margin, y: margin },
+      { x: margin, y: zr.height - noH - margin },
+      { x: zr.width - noW - margin, y: zr.height - noH - margin },
+      { x: zr.width / 2 - noW / 2, y: margin },
+      { x: zr.width / 2 - noW / 2, y: zr.height - noH - margin },
+    ];
+    const yesRect = yesRef.current?.getBoundingClientRect();
+    const overlapsYes = (x: number, y: number) => {
+      if (!yesRect) return false;
+      const pad = 12;
+      const nx0 = zr.left + x;
+      const ny0 = zr.top + y;
+      const nx1 = nx0 + noW;
+      const ny1 = ny0 + noH;
+      return !(
+        nx1 < yesRect.left + pad ||
+        nx0 > yesRect.right - pad ||
+        ny1 < yesRect.top + pad ||
+        ny0 > yesRect.bottom - pad
+      );
+    };
+    const pool = cands.filter((c) => !overlapsYes(c.x, c.y));
+    const choices = pool.length ? pool : cands;
+    const pick = choices[Math.floor(Math.random() * choices.length)];
+    const jitter = (range: number) => Math.random() * range * 2 - range;
+    setNoPos({
+      x: Math.max(
+        margin,
+        Math.min(pick.x + jitter(20), zr.width - noW - margin)
+      ),
+      y: Math.max(
+        margin,
+        Math.min(pick.y + jitter(10), zr.height - noH - margin)
+      ),
+    });
   }
 
   function handleNoHover() {
