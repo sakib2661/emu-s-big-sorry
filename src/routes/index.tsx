@@ -54,8 +54,14 @@ function ApologyApp() {
   const stage = Math.min(noClicks, 3);
   const crying = noClicks >= 3;
 
-  // Yes button grows with each "No".
-  const yesScale = 1 + Math.min(noClicks, 3) * 0.32;
+  // Yes button grows with each "No" (font/padding keep it in flow so it
+  // never overlaps/ covers the No button).
+  const yesSizeClass = [
+    "text-lg px-8 py-3",
+    "text-xl px-10 py-4",
+    "text-2xl px-12 py-5",
+    "text-3xl px-14 py-6",
+  ][stage];
 
   const header = HEADERS[stage];
   const subtitle = SUBTITLES[stage];
@@ -207,13 +213,12 @@ function ApologyApp() {
         {/* Buttons */}
         <div
           ref={buttonZoneRef}
-          className="relative mt-9 flex h-40 w-full items-center justify-center"
+          className="relative mt-9 flex min-h-[170px] w-full flex-wrap items-center justify-center gap-6"
         >
           {/* Yes button — grows as guilt grows */}
           <button
             onClick={handleYesClick}
-            style={{ transform: `scale(${yesScale})` }}
-            className="press pulse-ring btn-yes-glow relative z-20 inline-flex items-center gap-2 rounded-full bg-yes px-10 py-4 text-lg font-bold text-yes-foreground"
+            className={`press pulse-ring btn-yes-glow relative z-20 inline-flex items-center gap-2 rounded-full bg-yes font-bold text-yes-foreground ${yesSizeClass}`}
           >
             Yes, I forgive you 💚
           </button>
@@ -222,7 +227,7 @@ function ApologyApp() {
           {noClicks < 3 ? (
             <button
               onClick={handleNoClick}
-              className="press ml-6 inline-flex items-center gap-2 rounded-full border-2 border-no bg-no px-7 py-3 text-base font-semibold text-no-foreground hover:brightness-95"
+              className="press z-10 inline-flex items-center gap-2 rounded-full border-2 border-no bg-no px-7 py-3 text-base font-semibold text-no-foreground hover:brightness-95"
             >
               No 😤
             </button>
