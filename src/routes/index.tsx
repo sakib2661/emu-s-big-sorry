@@ -250,10 +250,11 @@ function ApologyApp() {
         {/* Buttons */}
         <div
           ref={buttonZoneRef}
-          className="relative mt-9 flex min-h-[170px] w-full flex-wrap items-center justify-center gap-6"
+          className="relative mt-9 flex min-h-[230px] w-full flex-wrap items-center justify-center gap-6"
         >
           {/* Yes button — grows as guilt grows */}
           <button
+            ref={yesRef}
             onClick={handleYesClick}
             className={`press pulse-ring btn-yes-glow relative z-20 inline-flex items-center gap-2 rounded-full bg-yes font-bold text-yes-foreground ${yesSizeClass}`}
           >
@@ -280,7 +281,7 @@ function ApologyApp() {
                       top: noPos.y,
                       transform: "scale(0.85)",
                     }
-                  : { position: "absolute", right: "4%", bottom: "0%" }
+                  : { position: "absolute", right: "3%", top: "4%" }
               }
               className="runaway press z-10 inline-flex items-center gap-2 rounded-full border-2 border-no bg-no px-6 py-2.5 text-sm font-semibold text-no-foreground"
             >
