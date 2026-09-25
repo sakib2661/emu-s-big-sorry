@@ -374,7 +374,7 @@ function FloatingHearts({ count = 9 }: { count?: number }) {
     setHearts(
       Array.from({ length: count }).map((_, i) => ({
         id: i,
-        emoji: emojis[i % emojis.length],
+        emoji: emojis[i % emojis.length] ?? "💖",
         left: Math.random() * 100,
         duration: 7 + Math.random() * 8,
         delay: Math.random() * 6,
