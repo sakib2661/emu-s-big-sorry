@@ -108,7 +108,7 @@ function ApologyApp() {
     };
     const pool = cands.filter((c) => !overlapsYes(c.x, c.y));
     const choices = pool.length ? pool : cands;
-    const pick = choices[Math.floor(Math.random() * choices.length)];
+    const pick = choices[Math.floor(Math.random() * choices.length)] ?? cands[0]!;
     const jitter = (range: number) => Math.random() * range * 2 - range;
     setNoPos({
       x: Math.max(
