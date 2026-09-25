@@ -363,16 +363,24 @@ function CelebrateScreen() {
 
 /** Drifting hearts in the background. */
 function FloatingHearts({ count = 9 }: { count?: number }) {
-  const hearts = useMemo(() => {
+  // Generate random positions only after hydration so server and client
+  // render identical (empty) markup first — avoids hydration mismatch.
+  const [hearts, setHearts] = useState<
+    { id: number; emoji: string; left: number; duration: number; delay: number; size: number }[]
+  >([]);
+
+  useEffect(() => {
     const emojis = ["💖", "💕", "💗", "💞", "🩷", "✨", "🧸"];
-    return Array.from({ length: count }).map((_, i) => ({
-      id: i,
-      emoji: emojis[i % emojis.length],
-      left: Math.random() * 100,
-      duration: 7 + Math.random() * 8,
-      delay: Math.random() * 6,
-      size: 18 + Math.random() * 26,
-    }));
+    setHearts(
+      Array.from({ length: count }).map((_, i) => ({
+        id: i,
+        emoji: emojis[i % emojis.length],
+        left: Math.random() * 100,
+        duration: 7 + Math.random() * 8,
+        delay: Math.random() * 6,
+        size: 18 + Math.random() * 26,
+      }))
+    );
   }, [count]);
 
   return (
