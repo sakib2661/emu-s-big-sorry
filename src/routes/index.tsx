@@ -243,7 +243,7 @@ function ApologyApp() {
                       top: noPos.y,
                       transform: "scale(0.85)",
                     }
-                  : { position: "absolute", left: "62%", top: "10%" }
+                  : { position: "absolute", right: "4%", bottom: "0%" }
               }
               className="runaway press z-10 inline-flex items-center gap-2 rounded-full border-2 border-no bg-no px-6 py-2.5 text-sm font-semibold text-no-foreground"
             >
